@@ -27,7 +27,7 @@ class AuthRepository extends BaseAuthRepository {
     } on auth.FirebaseAuthException catch (err) {
       throw Failure(code: err.code, message: err.message);
     } on PlatformException catch (err) {
-      throw Failure(code: err.code, message: err.message);
+      throw Failure(code: err.code, message: err.message ?? '');
     }
   }
 
@@ -55,7 +55,7 @@ class AuthRepository extends BaseAuthRepository {
     } on auth.FirebaseAuthException catch (err) {
       throw Failure(code: err.code, message: err.message);
     } on PlatformException catch (err) {
-      throw Failure(code: err.code, message: err.message);
+      throw Failure(code: err.code, message: err.message ?? '');
     }
   }
 
