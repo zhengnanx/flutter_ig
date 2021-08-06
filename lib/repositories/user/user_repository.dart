@@ -6,8 +6,8 @@ import 'package:flutter_ig/repositories/user/base_user_repository.dart';
 class UserRepository extends BaseUserRepository {
   final FirebaseFirestore _firebaseFirestore;
 
-  UserRepository({required FirebaseFirestore firebaseFirestore})
-      : _firebaseFirestore = firebaseFirestore;
+  UserRepository({FirebaseFirestore? firebaseFirestore})
+      : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   Future<User> getUserWithId({required String userId}) async {
     final doc =
