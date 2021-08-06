@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_ig/repositories/repositories.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  EquatableConfig.stringify = kDebugMode;
+  EquatableConfig.stringify = true;
   Bloc.observer = SimpleBlocObserver();
   runApp(MyApp());
 }
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    AuthRepository().logOut();
+    // AuthRepository().logOut();
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider<AuthRepository>(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_instagram/enums/enums.dart';
+import 'package:flutter_ig/enums/bottom_nav_item.dart';
+import 'package:flutter_ig/enums/enums.dart';
 
 class BottomNavBar extends StatelessWidget {
   final Map<BottomNavItem, IconData> items;
@@ -7,7 +8,7 @@ class BottomNavBar extends StatelessWidget {
   final Function(int) onTap;
 
   const BottomNavBar({
-    Key key,
+    Key? key,
     required this.items,
     required this.selectedItem,
     required this.onTap,
