@@ -18,7 +18,15 @@ class FeedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Feed Screen'),
+        child: TextButton(
+          onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => Scaffold(
+                    appBar: AppBar(
+                      title: Text('Hello World'),
+                    ),
+                  ))),
+          child: Text('Feed Screen'),
+        ),
       ),
     );
   }
