@@ -9,6 +9,7 @@ import 'package:flutter_ig/repositories/repositories.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  EquatableConfig.stringify = kDebugMode;
   Bloc.observer = SimpleBlocObserver();
   runApp(MyApp());
 }
