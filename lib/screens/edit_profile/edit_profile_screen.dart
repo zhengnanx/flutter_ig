@@ -3,12 +3,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_ig/helpers/helpers.dart';
 import 'package:flutter_ig/models/models.dart';
 
 import 'package:flutter_ig/repositories/repositories.dart';
 import 'package:flutter_ig/screens/edit_profile/cubit/edit_profile_cubit.dart';
 import 'package:flutter_ig/screens/profile/bloc/profile_bloc.dart';
 import 'package:flutter_ig/widgets/widgets.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreenArgs {
@@ -141,8 +143,8 @@ class EditProfileScreen extends StatelessWidget {
   }
 
   void _selectProfileImage(BuildContext context) async {
-    final pickedFile =
-        await ImagePicker().getImage(source: ImageSource.gallery);
+    final pickedFile = await ImageHelper.pickImageFromGallery(
+        context: context, cropStyle: CropStyle.circle, title: 'Profile Image');
     if (pickedFile != null) {
       context
           .read<EditProfileCubit>()
