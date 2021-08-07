@@ -30,7 +30,7 @@ class UserProfileImage extends StatelessWidget {
     );
   }
 
-  Icon _noProfileIcon() {
+  Icon? _noProfileIcon() {
     if (profileImage == null && profileImageUrl.isEmpty) {
       return Icon(
         Icons.account_circle,
@@ -39,6 +39,6 @@ class UserProfileImage extends StatelessWidget {
       );
     }
     // work around null safety
-    throw NullThrownError();
+    return null;
   }
 }
