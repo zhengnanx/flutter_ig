@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ig/screens/edit_profile/edit_profile_screen.dart';
+import 'package:flutter_ig/screens/profile/bloc/profile_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileButton extends StatelessWidget {
   final bool isCurrentUser;
@@ -29,9 +31,11 @@ class ProfileButton extends StatelessWidget {
               style: TextStyle(fontSize: 16.0),
             ))
         : TextButton(
-            onPressed: () {},
+            onPressed: () => isFollowing
+                ? context.read<ProfileBloc>().add(ProfileUnfollowUser())
+                : context.read<ProfileBloc>().add(ProfileFollowUser()),
             style: isFollowing
-                ? Colors.grey[300] as ButtonStyle
+                ? TextButton.styleFrom(backgroundColor: Colors.grey[300])
                 : TextButton.styleFrom(
                     primary: isFollowing ? Colors.black : Colors.white,
                     backgroundColor: Theme.of(context).primaryColor),

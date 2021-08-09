@@ -69,7 +69,7 @@ class _Stats extends StatelessWidget {
         ),
         Text(
           label,
-          style: TextStyle(color: Colors.black54),
+          style: const TextStyle(color: Colors.black54),
         ),
       ],
     );
