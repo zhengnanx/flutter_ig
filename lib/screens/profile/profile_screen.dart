@@ -7,6 +7,7 @@ import 'package:flutter_ig/cubits/liked_posts/liked_posts_cubit.dart';
 import 'package:flutter_ig/repositories/repositories.dart';
 import 'package:flutter_ig/screens/profile/bloc/profile_bloc.dart';
 import 'package:flutter_ig/screens/profile/widgets/widgets.dart';
+import 'package:flutter_ig/screens/screens.dart';
 import 'package:flutter_ig/widgets/widgets.dart';
 
 class ProfileScreenArgs {
@@ -159,7 +160,10 @@ class _ProfileScreenState extends State<ProfileScreen>
                       delegate: SliverChildBuilderDelegate((context, index) {
                         final post = state.posts[index];
                         return GestureDetector(
-                          onTap: () {},
+                          onTap: () => Navigator.of(context).pushNamed(
+                            CommentsScreen.routeName,
+                            arguments: CommentsScreenArgs(post: post),
+                          ),
                           child: CachedNetworkImage(
                             imageUrl: post.imageUrl,
                             fit: BoxFit.cover,
