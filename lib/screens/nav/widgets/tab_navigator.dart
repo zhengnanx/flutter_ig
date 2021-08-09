@@ -49,7 +49,7 @@ class TabNavigator extends StatelessWidget {
           create: (context) => FeedBloc(
             postRepository: context.read<PostRepository>(),
             authBloc: context.read<AuthBloc>(),
-          ),
+          )..add(FeedFetchPosts()),
           child: FeedScreen(),
         );
       case BottomNavItem.search:

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_ig/blocs/auth/auth_bloc.dart';
 import 'package:flutter_ig/models/models.dart';
 import 'package:flutter_ig/models/post_model.dart';
@@ -22,9 +23,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
         super(FeedState.initial());
 
   @override
-  Stream<FeedState> mapEventToState(
-    FeedEvent event,
-  ) async* {
+  Stream<FeedState> mapEventToState(FeedEvent event) async* {
     if (event is FeedFetchPosts) {
       yield* _mapFeedFetchPostsToState();
     } else if (event is FeedPaginatePosts) {
@@ -37,16 +36,32 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
     try {
       final posts =
           await _postRepository.getUserFeed(userId: _authBloc.state.user!.uid);
-      yield state.copyWith(
-        status: FeedStatus.loaded,
-        posts: posts,
-      );
+      yield state.copyWith(posts: posts, status: FeedStatus.loaded);
     } catch (err) {
       yield state.copyWith(
-          status: FeedStatus.error,
-          failure: const Failure(message: 'we were unable to load your feed'));
+        status: FeedStatus.error,
+        failure: const Failure(message: 'We were unable to load your feed.'),
+      );
     }
   }
 
-  Stream<FeedState> _mapFeedPaginatePostsToState() async* {}
+  Stream<FeedState> _mapFeedPaginatePostsToState() async* {
+    yield state.copyWith(status: FeedStatus.paginating);
+    try {
+      final lastPostId = state.posts.isNotEmpty ? state.posts.last.id : null;
+
+      final posts = await _postRepository.getUserFeed(
+        userId: _authBloc.state.user!.uid,
+        lastPostId: lastPostId,
+      );
+      final updatedPosts = List<Post>.from(state.posts)..addAll(posts);
+
+      yield state.copyWith(posts: updatedPosts, status: FeedStatus.loaded);
+    } catch (err) {
+      yield state.copyWith(
+        status: FeedStatus.error,
+        failure: const Failure(message: 'We were unable to load your feed.'),
+      );
+    }
+  }
 }
