@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_ig/blocs/auth/auth_bloc.dart';
 import 'package:flutter_ig/blocs/simple_bloc_observer.dart';
 import 'package:flutter_ig/config/custom_router.dart';
+import 'package:flutter_ig/cubits/liked_posts/liked_posts_cubit.dart';
 import 'package:flutter_ig/repositories/repositories.dart';
 
 void main() async {
@@ -40,6 +41,10 @@ class MyApp extends StatelessWidget {
           BlocProvider<AuthBloc>(
               create: (context) =>
                   AuthBloc(authRepository: context.read<AuthRepository>())),
+          BlocProvider<LikedPostsCubit>(
+              create: (context) => LikedPostsCubit(
+                  postRepository: context.read<PostRepository>(),
+                  authBloc: context.read<AuthBloc>())),
         ],
         child: MaterialApp(
           title: 'Flutter Instagram',

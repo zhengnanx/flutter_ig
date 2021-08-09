@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_ig/blocs/auth/auth_bloc.dart';
+import 'package:flutter_ig/cubits/liked_posts/liked_posts_cubit.dart';
 import 'package:flutter_ig/repositories/repositories.dart';
 import 'package:flutter_ig/screens/profile/bloc/profile_bloc.dart';
 import 'package:flutter_ig/screens/profile/widgets/widgets.dart';
@@ -23,10 +24,11 @@ class ProfileScreen extends StatefulWidget {
       settings: const RouteSettings(name: routeName),
       builder: (context) => BlocProvider<ProfileBloc>(
         create: (_) => ProfileBloc(
-          userRepository: context.read<UserRepository>(),
-          postRepository: context.read<PostRepository>(),
-          authBloc: context.read<AuthBloc>(),
-        )..add(ProfileLoadUser(userId: args.userId)),
+            userRepository: context.read<UserRepository>(),
+            postRepository: context.read<PostRepository>(),
+            authBloc: context.read<AuthBloc>(),
+            likedPostsCubit: context.read<LikedPostsCubit>())
+          ..add(ProfileLoadUser(userId: args.userId)),
         child: ProfileScreen(),
       ),
     );
@@ -70,8 +72,10 @@ class _ProfileScreenState extends State<ProfileScreen>
             actions: [
               if (state.isCurrentUser)
                 IconButton(
-                    onPressed: () =>
-                        context.read<AuthBloc>().add(AuthLogoutRequested()),
+                    onPressed: () {
+                      context.read<AuthBloc>().add(AuthLogoutRequested());
+                      context.read<LikedPostsCubit>().clearAllLikedPosts();
+                    },
                     icon: const Icon(Icons.exit_to_app))
             ],
           ),
@@ -166,9 +170,27 @@ class _ProfileScreenState extends State<ProfileScreen>
                   : SliverList(
                       delegate: SliverChildBuilderDelegate((context, index) {
                       final post = state.posts[index];
+                      final likedPostsState =
+                          context.watch<LikedPostsCubit>().state;
+                      final isLiked =
+                          likedPostsState.likedPostIds.contains(post.id);
+                      final recentlyLiked = likedPostsState.recentlyLikedPostIds
+                          .contains(post.id);
                       return PostView(
                         post: post,
-                        isLiked: false,
+                        isLiked: isLiked,
+                        recentlyLiked: recentlyLiked,
+                        onLike: () {
+                          if (isLiked) {
+                            context
+                                .read<LikedPostsCubit>()
+                                .unlikePost(post: post);
+                          } else {
+                            context
+                                .read<LikedPostsCubit>()
+                                .likePost(post: post);
+                          }
+                        },
                       );
                     }, childCount: state.posts.length)),
             ],

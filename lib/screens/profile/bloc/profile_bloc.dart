@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_ig/blocs/blocs.dart';
+import 'package:flutter_ig/cubits/liked_posts/liked_posts_cubit.dart';
 import 'package:flutter_ig/models/models.dart';
 import 'package:flutter_ig/repositories/repositories.dart';
 
@@ -13,16 +14,19 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final UserRepository _userRepository;
   final AuthBloc _authBloc;
   final PostRepository _postRepository;
+  final LikedPostsCubit _likedPostsCubit;
 
   StreamSubscription<List<Future<Post>>>? _postsSubscription;
 
-  ProfileBloc(
-      {required UserRepository userRepository,
-      required AuthBloc authBloc,
-      required PostRepository postRepository})
-      : _userRepository = userRepository,
+  ProfileBloc({
+    required UserRepository userRepository,
+    required AuthBloc authBloc,
+    required PostRepository postRepository,
+    required LikedPostsCubit likedPostsCubit,
+  })  : _userRepository = userRepository,
         _authBloc = authBloc,
         _postRepository = postRepository,
+        _likedPostsCubit = likedPostsCubit,
         super(ProfileState.initial());
 
   @override
@@ -86,6 +90,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Stream<ProfileState> _mapProfileUpdatePostsToState(
       ProfileUpdatePosts event) async* {
     yield state.copyWith(posts: event.posts);
+    final likedPostIds = await _postRepository.getLikedPostIds(
+        userId: _authBloc.state.user!.uid, posts: event.posts);
+    _likedPostsCubit.updateLikedPosts(postIds: likedPostIds);
   }
 
   Stream<ProfileState> _mapProfileUnfollowUserToState() async* {
