@@ -25,26 +25,18 @@ class _FeedScreenState extends State<FeedScreen> {
       },
       builder: (context, state) {
         return Scaffold(
-          body: Center(
-            child: TextButton(
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => Scaffold(
-                        appBar: AppBar(
-                          title: Text('Hello World'),
-                          actions: [
-                            if (state.posts.isEmpty &&
-                                state.status == FeedStatus.loaded)
-                              IconButton(
-                                  icon: const Icon(Icons.refresh),
-                                  onPressed: () => context.read<FeedBloc>().add(
-                                        FeedFetchPosts(),
-                                      ))
-                          ],
-                        ),
-                        body: _buildBody(state),
-                      ))),
-              child: Text('Feed Screen'),
+          body: Scaffold(
+            appBar: AppBar(
+              title: const Text('Instagram'),
+              actions: [
+                if (state.posts.isEmpty && state.status == FeedStatus.loaded)
+                  IconButton(
+                      onPressed: () =>
+                          context.read<FeedBloc>().add(FeedFetchPosts()),
+                      icon: const Icon(Icons.refresh))
+              ],
             ),
+            body: _buildBody(state),
           ),
         );
       },
