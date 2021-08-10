@@ -8,6 +8,7 @@ import 'package:flutter_ig/enums/bottom_nav_item.dart';
 import 'package:flutter_ig/repositories/repositories.dart';
 import 'package:flutter_ig/screens/create_post/cubit/create_post_cubit.dart';
 import 'package:flutter_ig/screens/feed/bloc/feed_bloc.dart';
+import 'package:flutter_ig/screens/notifications/bloc/notifications_bloc.dart';
 import 'package:flutter_ig/screens/profile/bloc/profile_bloc.dart';
 import 'package:flutter_ig/screens/screens.dart';
 import 'package:flutter_ig/screens/search/cubit/search_cubit.dart';
@@ -69,7 +70,13 @@ class TabNavigator extends StatelessWidget {
           child: CreatePostScreen(),
         );
       case BottomNavItem.notifications:
-        return NotificationsScreen();
+        return BlocProvider<NotificationsBloc>(
+          create: (context) => NotificationsBloc(
+            notificationRepository: context.read<NotificationRepository>(),
+            authBloc: context.read<AuthBloc>(),
+          ),
+          child: NotificationsScreen(),
+        );
       case BottomNavItem.profile:
         return BlocProvider(
           create: (_) => ProfileBloc(

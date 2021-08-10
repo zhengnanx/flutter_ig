@@ -7,7 +7,7 @@ import 'package:flutter_ig/repositories/notification/base_notification_repositor
 class NotificationRepository extends BaseNotificationRepository {
   final FirebaseFirestore _firebaseFirestore;
 
-  NotificationRepository(FirebaseFirestore firebaseFirestore)
+  NotificationRepository({FirebaseFirestore? firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   @override
