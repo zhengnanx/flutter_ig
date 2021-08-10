@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_ig/config/paths.dart';
+import 'package:flutter_ig/enums/enums.dart';
+import 'package:flutter_ig/models/models.dart';
 import 'package:flutter_ig/models/user_model.dart';
 import 'package:flutter_ig/repositories/user/base_user_repository.dart';
 
@@ -49,6 +51,16 @@ class UserRepository extends BaseUserRepository {
         .collection(Paths.userFollowers)
         .doc(userId)
         .set({});
+    final notification = Notif(
+        type: NotifType.follow,
+        fromUser: User.empty.copyWith(id: userId),
+        date: DateTime.now());
+
+    _firebaseFirestore
+        .collection(Paths.notifications)
+        .doc(userId)
+        .collection(Paths.userNotifications)
+        .add(notification.toDocument());
   }
 
   @override

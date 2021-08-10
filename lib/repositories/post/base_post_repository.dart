@@ -2,7 +2,7 @@ import 'package:flutter_ig/models/models.dart';
 
 abstract class BasePostRepository {
   Future<void> createPost({required Post post});
-  Future<void> createComment({required Comment comment});
+  Future<void> createComment({required Post post, required Comment comment});
   void createLike({required Post post, required String userId});
   Stream<List<Future<Post>>> getUserPosts({required String userId});
   Stream<List<Future<Comment>>> getPostComments({required String postId});
